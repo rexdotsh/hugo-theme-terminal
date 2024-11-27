@@ -1,0 +1,26 @@
+{{ $videoType := .Get "type" | default "local" }}
+{{ $src := .Get "src" }}
+{{ $class := .Get "class" | default "" }}
+{{ $title := .Get "title" | default "" }}
+{{ $autoplay := .Get "autoplay" | default false }}
+{{ $loop := .Get "loop" | default false }}
+{{ $controls := .Get "controls" | default true }}
+{{ $muted := .Get "muted" | default false }}
+{{ $style := .Get "style" | default "" }}
+
+<div class="video-wrapper {{ $class }}" {{ with $style }}style="{{ . | safeCSS }}" {{ end }}>
+    {{ if eq $videoType "youtube" }}
+    <div class="video-container">
+        <iframe src="https://www.youtube.com/embed/{{ $src }}?rel=0" title="{{ $title }}" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+        </iframe>
+    </div>
+    {{ else if eq $videoType "local" }}
+    <video {{ if $controls }}controls{{ end }} {{ if $autoplay }}autoplay{{ end }} {{ if $loop }}loop{{ end }} {{ if
+        $muted }}muted{{ end }} {{ with $title }}title="{{ . }}" {{ end }}>
+        <source src="{{ $src }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    {{ end }}
+</div>
